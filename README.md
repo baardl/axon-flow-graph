@@ -5,7 +5,7 @@ Visualize the flow of commands and events in an Axon Framework service
 
 ```
 mvn clean install
-java -jar target/axon-flow-graph-.jar
+java -jar target/axon-flow-graph-${project.version}.jar
 ```
 
 Output will be in the file axon-flow-graph.json

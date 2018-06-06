@@ -45,6 +45,22 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>.</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>**/README.md</include>
+        </includes>
+      </resource>
+      <!--<resource>-->
+        <!--<directory>src/main/resources</directory>-->
+        <!--<filtering>false</filtering>-->
+        <!--<excludes>-->
+          <!--<exclude>**/version.txt</exclude>-->
+        <!--</excludes>-->
+      <!--</resource>-->
+    </resources>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <plugin>
