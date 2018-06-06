@@ -9,6 +9,7 @@ import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.EventHandler;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,16 +29,19 @@ public class Main {
 
     }
 
-    void scanByAnnotation(String packageName, Class annotationClass) {
+    List<String> scanByAnnotation(String packageName, Class annotationClass) {
         final List<String> annotatedClasses = new FastClasspathScanner(packageName)
                 .enableMethodAnnotationIndexing().scan()
                 .getNamesOfClassesWithMethodAnnotation(annotationClass.getName());
         for (String className : annotatedClasses) {
             log.info("{} has annotation {}", className, annotationClass.getName());
         }
+
+        return annotatedClasses;
     }
 
-    void scanForImportedClass(String packageName, Class importedClass) {
+    List<String> scanForImportedClass(String packageName, Class importedClass) {
+        List<String> usingImportedClass = new ArrayList<>();
         ScanResult scanResult = new FastClasspathScanner(packageName)
                 // Must call this before .scan()
                 .enableFieldInfo()
@@ -48,10 +52,13 @@ public class Main {
         for (ClassInfo classInfo : classMap.values()) {
             List<FieldInfo> fieldInfo = classInfo.getFieldInfo();
             for (FieldInfo info : fieldInfo) {
-                if (info.getType().equals(importedClass))
-                log.info("{}, uses {} ", classInfo.getClassName(),info.getType().getName());
+                if (info.getType().equals(importedClass)) {
+                    log.info("{}, uses {} ", classInfo.getClassName(), info.getType().getName());
+                    usingImportedClass.add(classInfo.getClassName());
+                }
             }
         }
+        return usingImportedClass;
     }
 
     public static void main(String[] args) {

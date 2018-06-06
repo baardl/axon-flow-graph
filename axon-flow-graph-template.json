@@ -1,0 +1,38 @@
+{
+  "package_name": "io.baardl.axon",
+  "start": [
+    {
+      "name": "io.baardl.axon.action.ActionService",
+      "type": "CommandGateway",
+      "method_name": "create",
+      "next": "io.baardl.axon.action.CreateActionCommand"
+    },
+    {
+      "name": "io.baardl.axon.action.OtherService",
+      "type": "CommandGateway",
+      "method_name": "something",
+      "next": "io.baardl.axon.action.OtherCommand"
+    }
+  ],
+  "command_handlers": [
+    {
+      "name": "io.baardl.axon.action.ActionCommandHandler",
+      "type": "CommandHandler",
+      "method_name": "create",
+      "next": "io.baardl.axon.action.ActionCreatedEvent"
+    },
+    {
+      "name": "io.baardl.axon.action.ActionCommandHandler",
+      "type": "CommandHandler",
+      "method_name": "edit",
+      "next": "io.baardl.axon.action.ActionUpdatedEvent"
+    }
+  ],
+  "event_handlers": [
+    {
+      "name": "io.baardl.axon.action.ActionEventObserver",
+      "type": "EventHandler",
+      "method_name": "on-ActionCreatedEvent"
+    }
+  ]
+}
