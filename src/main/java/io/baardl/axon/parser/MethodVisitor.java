@@ -6,7 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 public class MethodVisitor extends VoidVisitorAdapter<Void> {
@@ -20,6 +22,7 @@ public class MethodVisitor extends VoidVisitorAdapter<Void> {
 		Optional<BlockStmt> body = n.getBody();
             log.info("Method body: {}", body);
 		System.out.println(n.getName());
+//		((MethodCallExpr) ((ExpressionStmt) n.getBody().value.statements.get(2)).expression).arguments.get(0);
 		super.visit(n, arg);
 	}
 }
