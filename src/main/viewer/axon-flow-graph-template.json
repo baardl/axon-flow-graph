@@ -19,12 +19,14 @@
       "name": "io.baardl.axon.action.ActionCommandHandler",
       "type": "CommandHandler",
       "method_name": "create",
+      "handle": "io.baardl.axon.action.CreateActionCommand",
       "next": "io.baardl.axon.action.ActionCreatedEvent"
     },
     {
       "name": "io.baardl.axon.action.ActionCommandHandler",
       "type": "CommandHandler",
       "method_name": "edit",
+      "handle": "io.baardl.axon.action.UpdateActionCommand",
       "next": "io.baardl.axon.action.ActionUpdatedEvent"
     }
   ],
@@ -32,6 +34,7 @@
     {
       "name": "io.baardl.axon.action.ActionEventObserver",
       "type": "EventHandler",
+      "handle": "io.baardl.axon.action.ActionUpdatedEvent",
       "method_name": "on-ActionCreatedEvent"
     }
   ]
