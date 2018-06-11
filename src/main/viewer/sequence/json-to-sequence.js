@@ -55,13 +55,13 @@ function findFlow(mydata) {
   for (var startIndex in mydata.start) {
     var start_id = mydata.start[startIndex].name;
     var handler = findCommandHandler(mydata,mydata.start[startIndex].next);
-    flow = flow + start_id + '->' + handler + ': \n';
+    flow = flow + start_id + '->' + handler + ': ' + mydata.start[startIndex].next + ' \n';
   }
 
   for (const commandHandler of mydata.command_handlers) {
     var commandId = commandHandler.name;
     var handler = findEventHandler(mydata, commandHandler.next);
-    flow = flow + commandId + '->' + handler + ': \n';
+    flow = flow + commandId + '->' + handler + ': ' + commandHandler.next +' \n';
   }
   return flow;
 }
