@@ -6,7 +6,7 @@ function fetchJson() {
 async function buildFlow() {
   var mydata = await fetchJson();
   // var flow_described = findStart(mydata) + findEnd(mydata) + findNodes(mydata) + findFlow(mydata);
-  var flow_described = findStart(mydata) + findNodes(mydata);
+  var flow_described = findStart(mydata) + findNodes(mydata) + findFlow(mydata);
   console.log("Flow: ", flow_described);
   return flow_described;
 
@@ -55,15 +55,14 @@ function findFlow(mydata) {
   for (var startIndex in mydata.start) {
     var start_id = mydata.start[startIndex].name;
     var handler = findCommandHandler(mydata,mydata.start[startIndex].next);
-    flow = flow + start_id + '-->' +handler + '\n';
+    flow = flow + start_id + '->' + handler + ': \n';
   }
 
   for (const commandHandler of mydata.command_handlers) {
     var commandId = commandHandler.name;
     var handler = findEventHandler(mydata, commandHandler.next);
-    flow = flow + commandId + '->' + handler + '\n';
+    flow = flow + commandId + '->' + handler + ': \n';
   }
-  // return start_id + '->io.baardl.axon.action.ActionCommandHandler->io.baardl.axon.action.ActionEventObserver->e';
   return flow;
 }
 
