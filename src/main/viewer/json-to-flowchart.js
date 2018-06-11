@@ -14,7 +14,7 @@ async function buildFlow() {
     'c2(true)->io->e\n' +
     'c2(false)->op2->e' ; //allow for true and false in conditionals
     */
-  debugger;
+  console.log("Flow: ", flow_described);
   return flow_described;
 
 }
@@ -76,9 +76,29 @@ function findNodes(mydata) {
 
 }
 
+function findCommandHandler(mydata, next) {
+  var handlerName = "";
+  for(var i in mydata.command_handlers) {
+    var handle = mydata.command_handlers[i].handle;
+    if (handle === next) {
+      handlerName = mydata.command_handlers[i].name;
+      break;
+    }
+  }
+  return handlerName;
+}
+
 function findFlow(mydata) {
-  var start_id = mydata.start[0].name;
-  return start_id + '->io.baardl.axon.action.ActionCommandHandler->io.baardl.axon.action.ActionEventObserver->e';
+
+  var flow = "";
+  for (var startIndex in mydata.start) {
+    var start_id = mydata.start[startIndex].name;
+    // flow = flow + start_id + '->io.baardl.axon.action.ActionCommandHandler->io.baardl.axon.action.ActionEventObserver->e \n '
+    var handler = findCommandHandler(mydata,mydata.start[startIndex].next);
+    flow = flow + start_id + '->' +handler + '\n';
+  }
+  // return start_id + '->io.baardl.axon.action.ActionCommandHandler->io.baardl.axon.action.ActionEventObserver->e';
+  return flow;
 
   /*
    for(var i in mydata.command_handlers) {

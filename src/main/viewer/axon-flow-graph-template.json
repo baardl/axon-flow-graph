@@ -1,41 +1,54 @@
 {
-  "package_name": "io.baardl.axon",
-  "start": [
-    {
-      "name": "io.baardl.axon.action.ActionService",
-      "type": "CommandGateway",
-      "method_name": "create",
-      "next": "io.baardl.axon.action.CreateActionCommand"
-    },
-    {
-      "name": "io.baardl.axon.action.OtherService",
-      "type": "CommandGateway",
-      "method_name": "something",
-      "next": "io.baardl.axon.action.OtherCommand"
-    }
-  ],
-  "command_handlers": [
-    {
-      "name": "io.baardl.axon.action.ActionCommandHandler",
-      "type": "CommandHandler",
-      "method_name": "create",
-      "handle": "io.baardl.axon.action.CreateActionCommand",
-      "next": "io.baardl.axon.action.ActionCreatedEvent"
-    },
-    {
-      "name": "io.baardl.axon.action.ActionCommandHandler",
-      "type": "CommandHandler",
-      "method_name": "edit",
-      "handle": "io.baardl.axon.action.UpdateActionCommand",
-      "next": "io.baardl.axon.action.ActionUpdatedEvent"
-    }
-  ],
-  "event_handlers": [
-    {
-      "name": "io.baardl.axon.action.ActionEventObserver",
-      "type": "EventHandler",
-      "handle": "io.baardl.axon.action.ActionUpdatedEvent",
-      "method_name": "on-ActionCreatedEvent"
-    }
-  ]
+    "package_name": "io.baardl.axon",
+    "start": [
+        {
+            "name": "io.baardl.axon.action.ActionService",
+            "type": "CommandGateway",
+            "method_name": "create",
+            "next": "io.baardl.axon.action.CreateActionCommand"
+        },
+        {
+            "name": "io.baardl.axon.action.OtherService",
+            "type": "CommandGateway",
+            "method_name": "something",
+            "next": "io.baardl.axon.action.CreateOtherCommand"
+        }
+    ],
+    "command_handlers": [
+        {
+            "name": "io.baardl.axon.action.ActionCommandHandler",
+            "type": "CommandHandler",
+            "method_name": "create",
+            "handle": "io.baardl.axon.action.CreateActionCommand",
+            "next": "io.baardl.axon.action.ActionCreatedEvent"
+        },
+        {
+            "name": "io.baardl.axon.action.ActionCommandHandler",
+            "type": "CommandHandler",
+            "method_name": "edit",
+            "handle": "io.baardl.axon.action.UpdateActionCommand",
+            "next": "io.baardl.axon.action.ActionUpdatedEvent"
+        },
+        {
+            "name": "io.baardl.axon.action.OtherCommandHandler",
+            "type": "CommandHandler",
+            "method_name": "edit",
+            "handle": "io.baardl.axon.action.CreateOtherCommand",
+            "next": "io.baardl.axon.action.OtherCreatedEvent"
+        }
+    ],
+    "event_handlers": [
+        {
+            "name": "io.baardl.axon.action.ActionEventObserver",
+            "type": "EventHandler",
+            "handle": "io.baardl.axon.action.ActionUpdatedEvent",
+            "method_name": "on-ActionCreatedEvent"
+        },
+        {
+            "name": "io.baardl.axon.action.OtherEventObserver",
+            "type": "EventHandler",
+            "handle": "io.baardl.axon.action.OtherCreatedEvent",
+            "method_name": "on-OtherCreatedEvent"
+        }
+    ]
 }
