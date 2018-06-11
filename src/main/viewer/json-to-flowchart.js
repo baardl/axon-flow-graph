@@ -5,7 +5,7 @@ function fetchJson() {
 
 async function buildFlow() {
   var mydata = await fetchJson();
-  var flow_described = findStart(mydata) + findEnd(mydata) + findNodes(mydata) + findFlow();
+  var flow_described = findStart(mydata) + findEnd(mydata) + findNodes(mydata) + findFlow(mydata);
   /*
     '\n' +
     'st->op1(right)->cond\n' +
@@ -30,8 +30,16 @@ function findStart(mydata) {
     }
    */
 
+  var nodes = "";
+  for(var i in mydata.start) {
+    var id = mydata.start[i].name;
+    var name = mydata.start[i].name;
+    nodes = nodes + id + '=>start: ' + name + '\n';
+  }
+
   var name = mydata.start[0].name;
-  return 'st=>start: ' + name + ':>http://www.google.com[blank]\n';
+  // return 'st=>start: ' + name + ':>http://www.google.com[blank]\n';
+  return nodes;
 }
 
 function findEnd() {
@@ -68,8 +76,9 @@ function findNodes(mydata) {
 
 }
 
-function findFlow() {
-  return 'st->io.baardl.axon.action.ActionCommandHandler->io.baardl.axon.action.ActionEventObserver->e';
+function findFlow(mydata) {
+  var start_id = mydata.start[0].name;
+  return start_id + '->io.baardl.axon.action.ActionCommandHandler->io.baardl.axon.action.ActionEventObserver->e';
 
   /*
    for(var i in mydata.command_handlers) {
