@@ -76,6 +76,25 @@ function findNodes(mydata) {
 
 }
 
+function findFlow(mydata) {
+
+  var flow = "";
+  for (var startIndex in mydata.start) {
+    var start_id = mydata.start[startIndex].name;
+    // flow = flow + start_id + '->io.baardl.axon.action.ActionCommandHandler->io.baardl.axon.action.ActionEventObserver->e \n '
+    var handler = findCommandHandler(mydata,mydata.start[startIndex].next);
+    flow = flow + start_id + '->' +handler + '\n';
+  }
+
+  for (const commandHandler of mydata.command_handlers) {
+    var commandId = commandHandler.name;
+    var handler = findEventHandler(mydata, commandHandler.next);
+    flow = flow + commandId + '->' + handler + '\n';
+  }
+  // return start_id + '->io.baardl.axon.action.ActionCommandHandler->io.baardl.axon.action.ActionEventObserver->e';
+  return flow;
+}
+
 function findCommandHandler(mydata, next) {
   var handlerName = "";
   for(var i in mydata.command_handlers) {
@@ -88,30 +107,14 @@ function findCommandHandler(mydata, next) {
   return handlerName;
 }
 
-function findFlow(mydata) {
-
-  var flow = "";
-  for (var startIndex in mydata.start) {
-    var start_id = mydata.start[startIndex].name;
-    // flow = flow + start_id + '->io.baardl.axon.action.ActionCommandHandler->io.baardl.axon.action.ActionEventObserver->e \n '
-    var handler = findCommandHandler(mydata,mydata.start[startIndex].next);
-    flow = flow + start_id + '->' +handler + '\n';
-  }
-  // return start_id + '->io.baardl.axon.action.ActionCommandHandler->io.baardl.axon.action.ActionEventObserver->e';
-  return flow;
-
-  /*
-   for(var i in mydata.command_handlers) {
-    var id = mydata.command_handlers[i].name;
-    var name = mydata.command_handlers[i].name;
-    nodes = nodes + id + '=>operation: ' + name + '\n';
-  }
-
+function findEventHandler(mydata, next) {
+  var handlerName = "";
   for(var i in mydata.event_handlers) {
-    var id = mydata.event_handlers[i].name;
-    var name = mydata.event_handlers[i].name;
-    nodes = nodes + id + '=>subroutine: ' + name + '\n';
+    var handle = mydata.event_handlers[i].handle;
+    if (handle === next) {
+      handlerName = mydata.event_handlers[i].name;
+      break;
+    }
   }
-   */
-
+  return handlerName;
 }

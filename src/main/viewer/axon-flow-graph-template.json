@@ -41,8 +41,14 @@
         {
             "name": "io.baardl.axon.action.ActionEventObserver",
             "type": "EventHandler",
-            "handle": "io.baardl.axon.action.ActionUpdatedEvent",
+            "handle": "io.baardl.axon.action.ActionCreatedEvent",
             "method_name": "on-ActionCreatedEvent"
+        },
+        {
+            "name": "io.baardl.axon.action.ActionEventObserver",
+            "type": "EventHandler",
+            "handle": "io.baardl.axon.action.ActionUpdatedEvent",
+            "method_name": "on-ActionUpdateEvent"
         },
         {
             "name": "io.baardl.axon.action.OtherEventObserver",
