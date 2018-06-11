@@ -1,0 +1,26 @@
+<html>
+
+<body>
+<h3>Hei</h3>
+<div id="diagram">Diagram will be placed here</div>
+<script src="webfont.js"></script>
+<script src="snap.svg-min.js"></script>
+<script src="underscore-min.js"></script>
+<script src="sequence-diagram-min.js"></script>
+<script type="text/javascript" src="json-to-sequence.js"></script>
+
+<script>
+  // var flow_described = findStart() + findEnd() + findNodes + findFlow();
+  buildFlow()
+    .then(data=>{
+      var d = Diagram.parse("A->B: Does something");
+      var options = {theme: 'simple'};
+      d.drawSVG('diagram', options);
+
+      })
+
+
+</script>
+
+</body>
+</html>
