@@ -5,6 +5,7 @@ public class MethodDto {
     private final String methodName;
     private String fileName;
     private String type;
+    private String handle;
     private String next;
     private String packageName;
 
@@ -30,6 +31,14 @@ public class MethodDto {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getHandle() {
+        return handle;
+    }
+
+    public void setHandle(String handle) {
+        this.handle = handle;
     }
 
     public String getNext() {

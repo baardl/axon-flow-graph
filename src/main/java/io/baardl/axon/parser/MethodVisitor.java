@@ -2,6 +2,7 @@ package io.baardl.axon.parser;
 
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -22,9 +23,6 @@ public class MethodVisitor extends VoidVisitorAdapter<Void> {
 
     @Override
     public void visit(MethodDeclaration n, Void arg) {
-            /* here you can access the attributes of the method.
-             this method will be called for all methods in this
-             CompilationUnit, including inner class methods */
         log.info("Method: {}", n.getName());
         MethodDto methodDto = new MethodDto(n.getNameAsString());
         String annotation = parseAnnotations(n);
@@ -35,8 +33,19 @@ public class MethodVisitor extends VoidVisitorAdapter<Void> {
         log.info("Method body: {}", body);
 //		((MethodCallExpr) ((ExpressionStmt) n.getBody().value.statements.get(2)).expression).arguments.get(0);
         methodDto = paseBody(n.getBody(), methodDto);
+        String handle = parseParameters(n);
+        methodDto.setHandle(handle);
         super.visit(n, arg);
         this.methodDto =  methodDto;
+    }
+
+    private String parseParameters(MethodDeclaration n) {
+        String handle = null;
+        NodeList<Parameter> parameters = n.getParameters();
+        if (parameters != null && parameters.size() > 0) {
+            handle = parameters.get(0).getTypeAsString();
+        }
+        return handle;
     }
 
     private String parseAnnotations(MethodDeclaration n) {

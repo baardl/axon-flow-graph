@@ -1,5 +1,7 @@
 package io.baardl.axon.graph;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.baardl.axon.parser.MethodParser;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import io.github.lukehutch.fastclasspathscanner.scanner.ClassInfo;
@@ -104,6 +106,10 @@ public class Main {
         for (HandlerDescriptor descriptor : parsedDescriptors) {
             log.trace("Descriptor {}", descriptor);
         }
+
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        log.trace("Json: {}", gson.toJson(parsedDescriptors));
 
 
 

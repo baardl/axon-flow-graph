@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.baardl.axon.parser.HandleDescriptorMapper.buildHandlerDescriptor;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class MethodParser {
@@ -39,6 +40,7 @@ public class MethodParser {
 			MethodVisitor methodVisitor = new MethodVisitor();
 			cu.accept(methodVisitor, null);
 			MethodDto methodDto = methodVisitor.getMethodDto();
+			methodDto.setFileName(commandHandler);
 			String packageName = cu.getPackageDeclaration().get().getName().asString();
 			methodDto.setPackageName(packageName);
 			log.trace("MethodDto: {}", methodDto);
@@ -48,19 +50,6 @@ public class MethodParser {
 			log.trace("Failed to parse file: {}", commandHandler);
 		}
 		return handlerDescriptors;
-	}
-
-	HandlerDescriptor buildHandlerDescriptor(MethodDto methodDto) {
-		HandlerDescriptor handlerDescriptor = null;
-		if (methodDto != null) {
-			String fileName = methodDto.getFileName();
-			String methodName = methodDto.getMethodName();
-			String type = methodDto.getType();
-			String handle = methodDto.getType();
-			String next = methodDto.getNext();
-			handlerDescriptor = new HandlerDescriptor(fileName, type, methodName, next, handle);
-		}
-		return handlerDescriptor;
 	}
 
 	FileInputStream buildInputStream(String javaPath, String className) {
