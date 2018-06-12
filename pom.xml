@@ -6,7 +6,7 @@
 
   <groupId>io.baardl.axon</groupId>
   <artifactId>axon-flow-graph</artifactId>
-  <version>0.1</version>
+  <version>0.2-SNAPSHOT</version>
 
   <name>axon-flow-graph</name>
   <url>https://github.com/baardl/axon-flow-graph</url>
