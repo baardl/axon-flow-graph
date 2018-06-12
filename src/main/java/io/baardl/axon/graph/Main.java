@@ -9,6 +9,7 @@ import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.EventHandler;
 import org.slf4j.Logger;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -61,10 +62,25 @@ public class Main {
         return usingImportedClass;
     }
 
+    Class findEventClass(String className) {
+        Class<?> animalClass = null;
+        try {
+            animalClass = Class.forName(className);
+            Method[] methods = animalClass.getDeclaredMethods();
+            log.trace("Methods: {}", methods);
+
+        } catch (ClassNotFoundException e) {
+            log.trace("Class not found.", e);
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         log.info("Start");
         Main main = new Main();
         main.scan("io.baardl.axon.action");
+//        main.scan("no.nrk.musikk");
+        main.findEventClass("io.baardl.axon.action.ActionCommandHandler");
         log.info("Done");
     }
 }

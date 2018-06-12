@@ -9,3 +9,10 @@ java -jar target/axon-flow-graph-${project.version}.jar
 ```
 
 Output will be in the file axon-flow-graph.json
+
+## Work in progress:
+
+### Java Parsin
+
+[Parse Method](src/main/java/io/baardl/axon/parser/MethodParser.java)
+- https://javaparser.org/
