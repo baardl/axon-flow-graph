@@ -1,5 +1,6 @@
 package io.baardl.axon.graph;
 
+import io.baardl.axon.parser.MethodParser;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import io.github.lukehutch.fastclasspathscanner.scanner.ClassInfo;
 import io.github.lukehutch.fastclasspathscanner.scanner.FieldInfo;
@@ -23,10 +24,15 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class Main {
     private static final Logger log = getLogger(Main.class);
 
-    void scan(String packageName) {
-        scanByAnnotation(packageName, CommandHandler.class);
-        scanByAnnotation(packageName, EventHandler.class);
-        scanForImportedClass(packageName, CommandGateway.class);
+    List<String> scan(String packageName) {
+        List<String> classes = new ArrayList<>();
+        List<String> commandHandlers = scanByAnnotation(packageName, CommandHandler.class);
+        List<String> eventHandlers = scanByAnnotation(packageName, EventHandler.class);
+        List<String> commandGatewayCallers = scanForImportedClass(packageName, CommandGateway.class);
+        classes.addAll(commandHandlers);
+        classes.addAll(eventHandlers);
+        classes.addAll(commandGatewayCallers);
+        return classes;
 
     }
 
@@ -78,9 +84,28 @@ public class Main {
     public static void main(String[] args) {
         log.info("Start");
         Main main = new Main();
-        main.scan("io.baardl.axon.action");
+        List<String> classes = main.scan("io.baardl.axon.action");
 //        main.scan("no.nrk.musikk");
-        main.findEventClass("io.baardl.axon.action.ActionCommandHandler");
+//        main.findEventClass("io.baardl.axon.action.ActionCommandHandler");
+        main.printJson("src/main/java/", classes);
         log.info("Done");
+    }
+
+    void printJson(String javaPath, List<String> classes) {
+        MethodParser methodParser = new MethodParser();
+        List<HandlerDescriptor> handlerDescriptors = new ArrayList<>();
+        /*
+        for (String className : classes) {
+            List<HandlerDescriptor> handlerDescriptor = methodParser.parseFile(javaPath, className);
+            handlerDescriptors.addAll(handlerDescriptor);
+        }
+        */
+        List<HandlerDescriptor> parsedDescriptors = methodParser.parseFile(javaPath, "io.baardl.axon.action.ActionCommandHandler");
+        for (HandlerDescriptor descriptor : parsedDescriptors) {
+            log.trace("Descriptor {}", descriptor);
+        }
+
+
+
     }
 }

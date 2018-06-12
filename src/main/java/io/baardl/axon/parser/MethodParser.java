@@ -2,10 +2,13 @@ package io.baardl.axon.parser;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import io.baardl.axon.graph.HandlerDescriptor;
 import org.slf4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -24,8 +27,8 @@ public class MethodParser {
 
 	}
 
-	void parseFile(String javaPath, String commandHandler) {
-		// creates an input stream for the file to be parsed
+	public List<HandlerDescriptor> parseFile(String javaPath, String commandHandler) {
+		List<HandlerDescriptor> handlerDescriptors = new ArrayList<>();
 		FileInputStream in = buildInputStream(javaPath, commandHandler);
 		if (in != null) {
 
@@ -39,9 +42,25 @@ public class MethodParser {
 			String packageName = cu.getPackageDeclaration().get().getName().asString();
 			methodDto.setPackageName(packageName);
 			log.trace("MethodDto: {}", methodDto);
+			HandlerDescriptor handlerDescriptor = buildHandlerDescriptor(methodDto);
+			handlerDescriptors.add(handlerDescriptor);
 		} else {
 			log.trace("Failed to parse file: {}", commandHandler);
 		}
+		return handlerDescriptors;
+	}
+
+	HandlerDescriptor buildHandlerDescriptor(MethodDto methodDto) {
+		HandlerDescriptor handlerDescriptor = null;
+		if (methodDto != null) {
+			String fileName = methodDto.getFileName();
+			String methodName = methodDto.getMethodName();
+			String type = methodDto.getType();
+			String handle = methodDto.getType();
+			String next = methodDto.getNext();
+			handlerDescriptor = new HandlerDescriptor(fileName, type, methodName, next, handle);
+		}
+		return handlerDescriptor;
 	}
 
 	FileInputStream buildInputStream(String javaPath, String className) {

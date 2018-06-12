@@ -11,11 +11,26 @@ package io.baardl.axon.graph;
  */
 public class HandlerDescriptor extends MethodDescriptor {
     private final String handle;
+
+    /**
+     *
+     * @param name
+     * @param type
+     * @param handle
+     */
     public HandlerDescriptor(String name, String type, String handle) {
         super(name, type);
         this.handle = handle;
     }
 
+    /**
+     *
+     * @param name
+     * @param type
+     * @param methodName
+     * @param next
+     * @param handle
+     */
     public HandlerDescriptor(String name, String type, String methodName, String next, String handle) {
         super(name, type, methodName, next);
         this.handle = handle;
