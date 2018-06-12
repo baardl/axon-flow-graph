@@ -16,7 +16,7 @@ public class HandleDescriptorMapper {
                 handle = packageName + "." + handle;
             }
             String next = methodDto.getNext();
-            if (!next.startsWith(packageName)) {
+            if (next != null && !next.startsWith(packageName)) {
                 next = packageName + "." + next;
             }
             handlerDescriptor = new HandlerDescriptor(fileName, type, methodName, next, handle);

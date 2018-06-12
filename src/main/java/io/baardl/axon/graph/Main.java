@@ -95,17 +95,17 @@ public class Main {
 
     void printJson(String javaPath, List<String> classes) {
         MethodParser methodParser = new MethodParser();
-        List<HandlerDescriptor> handlerDescriptors = new ArrayList<>();
-        /*
+        List<HandlerDescriptor> parsedDescriptors = new ArrayList<>();
         for (String className : classes) {
-            List<HandlerDescriptor> handlerDescriptor = methodParser.parseFile(javaPath, className);
-            handlerDescriptors.addAll(handlerDescriptor);
+            List<HandlerDescriptor> handlerDescriptors = methodParser.parseFile(javaPath, className);
+            parsedDescriptors.addAll(handlerDescriptors);
         }
-        */
+        /*
         List<HandlerDescriptor> parsedDescriptors = methodParser.parseFile(javaPath, "io.baardl.axon.action.ActionCommandHandler");
         for (HandlerDescriptor descriptor : parsedDescriptors) {
             log.trace("Descriptor {}", descriptor);
         }
+        */
 
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();

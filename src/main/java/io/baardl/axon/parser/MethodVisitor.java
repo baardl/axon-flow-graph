@@ -66,10 +66,12 @@ public class MethodVisitor extends VoidVisitorAdapter<Void> {
                     arguments = ((MethodCallExpr) ((ExpressionStmt) statement).getExpression()).getArguments();
                     for (Expression argument : arguments) {
                         if (argument.toString().contains("Event")) {
-                            log.trace("Contains Event: {}", argument);
-                            ObjectCreationExpr objectCreationExpr = ((ObjectCreationExpr) argument);
-                            log.trace("Name: {}", objectCreationExpr);
-                            methodDto.setNext(objectCreationExpr.getType().getName().asString());
+                            if (argument instanceof ObjectCreationExpr) {
+                                log.trace("Contains Event: {}", argument);
+                                ObjectCreationExpr objectCreationExpr = ((ObjectCreationExpr) argument);
+                                log.trace("Name: {}", objectCreationExpr);
+                                methodDto.setNext(objectCreationExpr.getType().getName().asString());
+                            }
                         }
                     }
                 }
