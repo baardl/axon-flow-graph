@@ -12,6 +12,9 @@ import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.eventhandling.EventHandler;
 import org.slf4j.Logger;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -109,9 +112,34 @@ public class Main {
 
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
-        log.trace("Json: {}", gson.toJson(parsedDescriptors));
+        String json = gson.toJson(parsedDescriptors);
+        log.trace("Json: {}", json);
+        String outputFile = "axon-flow-graph.json";
+        writeJsonToFile(outputFile, json);
 
+    }
 
+    private void writeJsonToFile(String outputFile, String json) {
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(outputFile);
+            byte[] contentInBytes = json.getBytes();
 
+            out.write(contentInBytes);
+            out.flush();
+            out.close();
+        } catch (FileNotFoundException e) {
+            log.error("Failed to write json to file. Filename {}, json: {}. Reason {}", outputFile, json, e.getMessage());
+        } catch (IOException e) {
+            log.error("Failed to write json to file. Filename {}, json: {}. Reason {}", outputFile, json, e.getMessage());
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                //ignore
+            }
+        }
     }
 }
