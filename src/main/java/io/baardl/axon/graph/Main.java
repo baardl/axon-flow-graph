@@ -89,14 +89,15 @@ public class Main {
     public static void main(String[] args) {
         log.info("Start");
         Main main = new Main();
-        List<String> classes = main.scan("io.baardl.axon.action");
+        String packageName = "io.baardl.axon.action";
+        List<String> classes = main.scan(packageName);
 //        main.scan("no.nrk.musikk");
 //        main.findEventClass("io.baardl.axon.action.ActionCommandHandler");
-        main.printJson("src/main/java/", classes);
+        main.printJson("src/main/java/", classes, packageName);
         log.info("Done");
     }
 
-    void printJson(String javaPath, List<String> classes) {
+    void printJson(String javaPath, List<String> classes, String packageName) {
         MethodParser methodParser = new MethodParser();
         List<HandlerDescriptor> parsedDescriptors = new ArrayList<>();
         for (String className : classes) {
@@ -110,16 +111,17 @@ public class Main {
         }
         */
 
+        AxonFlowGraph axonFlowGraph = new AxonFlowGraph(packageName, parsedDescriptors);
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
-        String json = gson.toJson(parsedDescriptors);
+        String json = gson.toJson(axonFlowGraph);
         log.trace("Json: {}", json);
         String outputFile = "axon-flow-graph.json";
-        writeJsonToFile(outputFile, json);
+        writeJsonToFile(outputFile, json, packageName);
 
     }
 
-    private void writeJsonToFile(String outputFile, String json) {
+    private void writeJsonToFile(String outputFile, String json, String packageName) {
         FileOutputStream out = null;
         try {
             out = new FileOutputStream(outputFile);

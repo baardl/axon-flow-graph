@@ -1,5 +1,7 @@
 function fetchJson() {
-  return fetch("../axon-flow-graph-template.json")
+    // var json_file = "../axon-flow-graph-template.json";
+    var json_file = "../../../../axon-flow-graph.json"
+    return fetch(json_file)
     .then(data=>data.json())
 }
 
@@ -22,7 +24,7 @@ function findStart(mydata) {
     nodes = nodes + 'participant ' +  id + '\n';
   }
 
-  var name = mydata.start[0].name;
+  // var name = mydata.start[0].name;
   return nodes;
 }
 

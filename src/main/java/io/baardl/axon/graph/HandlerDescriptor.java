@@ -24,7 +24,7 @@ public class HandlerDescriptor extends MethodDescriptor {
     }
 
     /**
-     *
+     *command_handlers
      * @param name
      * @param type
      * @param methodName
