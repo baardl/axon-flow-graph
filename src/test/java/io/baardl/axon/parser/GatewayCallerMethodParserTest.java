@@ -34,6 +34,7 @@ public class GatewayCallerMethodParserTest {
         */
         MethodDescriptor descriptor = parsedDescriptors.get(0);
         assertEquals("io.baardl.axon.action.ActionService", descriptor.getName());
+        assertEquals("create", descriptor.getMethodName());
         assertEquals("CommandGateway", descriptor.getType());
         assertEquals("io.baardl.axon.action.CreateActionCommand", descriptor.getNext());
 
