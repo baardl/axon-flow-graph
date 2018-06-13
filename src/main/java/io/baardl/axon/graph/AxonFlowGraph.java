@@ -10,7 +10,7 @@ public class AxonFlowGraph {
     private String packageName;
 
     @SerializedName("start")
-    private List<HandlerDescriptor> start = new ArrayList<>();
+    private List<MethodDescriptor> start = new ArrayList<>();
 
     @SerializedName("command_handlers")
     private List<HandlerDescriptor> commandHandlers = new ArrayList<>();
@@ -18,23 +18,23 @@ public class AxonFlowGraph {
     @SerializedName("event_handlers")
     private List<HandlerDescriptor> eventHandlers = new ArrayList<>();
 
-    public AxonFlowGraph(String packageName, List<HandlerDescriptor> handlers) {
+    public AxonFlowGraph(String packageName, List<MethodDescriptor> handlers) {
         this.packageName = packageName;
         updateHandlers(handlers);
     }
 
-    public void updateHandlers(List<HandlerDescriptor> handlers) {
-        for (HandlerDescriptor handler : handlers) {
+    public void updateHandlers(List<MethodDescriptor> handlers) {
+        for (MethodDescriptor handler : handlers) {
             String type = handler.getType();
             if (type == null) {
                 type = "start";
             }
             switch (type) {
                 case "CommandHandler":
-                    commandHandlers.add(handler);
+                    commandHandlers.add((HandlerDescriptor)handler);
                     break;
                 case "EventHandler":
-                    eventHandlers.add(handler);
+                    eventHandlers.add((HandlerDescriptor)handler);
                     break;
                 case "start":
                     start.add(handler);
@@ -62,11 +62,11 @@ public class AxonFlowGraph {
         this.commandHandlers = commandHandlers;
     }
 
-    public List<HandlerDescriptor> getStart() {
+    public List<MethodDescriptor> getStart() {
         return start;
     }
 
-    public void setStart(List<HandlerDescriptor> start) {
+    public void setStart(List<MethodDescriptor> start) {
         this.start = start;
     }
 

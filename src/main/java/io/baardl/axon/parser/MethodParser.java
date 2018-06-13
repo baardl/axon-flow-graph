@@ -28,9 +28,9 @@ public class MethodParser {
 
 	}
 
-	public List<HandlerDescriptor> parseFile(String javaPath, String commandHandler) {
+	public List<HandlerDescriptor> parseFile(String javaPath, String handlerClassName) {
 		List<HandlerDescriptor> handlerDescriptors = new ArrayList<>();
-		FileInputStream in = buildInputStream(javaPath, commandHandler);
+		FileInputStream in = buildInputStream(javaPath, handlerClassName);
 		if (in != null) {
 
 			// parse it
@@ -40,14 +40,14 @@ public class MethodParser {
 			MethodVisitor methodVisitor = new MethodVisitor();
 			cu.accept(methodVisitor, null);
 			MethodDto methodDto = methodVisitor.getMethodDto();
-			methodDto.setFileName(commandHandler);
+			methodDto.setFileName(handlerClassName);
 			String packageName = cu.getPackageDeclaration().get().getName().asString();
 			methodDto.setPackageName(packageName);
 			log.trace("MethodDto: {}", methodDto);
 			HandlerDescriptor handlerDescriptor = buildHandlerDescriptor(methodDto);
 			handlerDescriptors.add(handlerDescriptor);
 		} else {
-			log.trace("Failed to parse file: {}", commandHandler);
+			log.trace("Failed to parse file: {}", handlerClassName);
 		}
 		return handlerDescriptors;
 	}

@@ -2,6 +2,7 @@ package io.baardl.axon.graph;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import io.baardl.axon.parser.GatewayCallerMethodParser;
 import io.baardl.axon.parser.MethodParser;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import io.github.lukehutch.fastclasspathscanner.scanner.ClassInfo;
@@ -15,7 +16,6 @@ import org.slf4j.Logger;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,11 +29,15 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class Main {
     private static final Logger log = getLogger(Main.class);
 
+    private List<String> commandHandlers;
+    private List<String> eventHandlers;
+    private List<String> commandGatewayCallers;
+
     List<String> scan(String packageName) {
         List<String> classes = new ArrayList<>();
-        List<String> commandHandlers = scanByAnnotation(packageName, CommandHandler.class);
-        List<String> eventHandlers = scanByAnnotation(packageName, EventHandler.class);
-        List<String> commandGatewayCallers = scanForImportedClass(packageName, CommandGateway.class);
+        commandHandlers = scanByAnnotation(packageName, CommandHandler.class);
+        eventHandlers = scanByAnnotation(packageName, EventHandler.class);
+        commandGatewayCallers = scanForImportedClass(packageName, CommandGateway.class);
         classes.addAll(commandHandlers);
         classes.addAll(eventHandlers);
         classes.addAll(commandGatewayCallers);
@@ -73,19 +77,6 @@ public class Main {
         return usingImportedClass;
     }
 
-    Class findEventClass(String className) {
-        Class<?> animalClass = null;
-        try {
-            animalClass = Class.forName(className);
-            Method[] methods = animalClass.getDeclaredMethods();
-            log.trace("Methods: {}", methods);
-
-        } catch (ClassNotFoundException e) {
-            log.trace("Class not found.", e);
-        }
-        return null;
-    }
-
     public static void main(String[] args) {
         log.info("Start");
         Main main = new Main();
@@ -93,16 +84,25 @@ public class Main {
         List<String> classes = main.scan(packageName);
 //        main.scan("no.nrk.musikk");
 //        main.findEventClass("io.baardl.axon.action.ActionCommandHandler");
-        main.printJson("src/main/java/", classes, packageName);
+        main.printJson("src/main/java/", packageName);
         log.info("Done");
     }
 
-    void printJson(String javaPath, List<String> classes, String packageName) {
+    void printJson(String javaPath, String packageName) {
         MethodParser methodParser = new MethodParser();
-        List<HandlerDescriptor> parsedDescriptors = new ArrayList<>();
-        for (String className : classes) {
+        GatewayCallerMethodParser gatewayParser = new GatewayCallerMethodParser();
+        List<MethodDescriptor> parsedDescriptors = new ArrayList<>();
+        List<String> handlerClasses = new ArrayList<>();
+        handlerClasses.addAll(commandHandlers);
+        handlerClasses.addAll(eventHandlers);
+        for (String className : handlerClasses) {
             List<HandlerDescriptor> handlerDescriptors = methodParser.parseFile(javaPath, className);
             parsedDescriptors.addAll(handlerDescriptors);
+        }
+
+        for (String commandGatewayCaller : commandGatewayCallers) {
+            List<MethodDescriptor> gatewayCallerDescriptors = gatewayParser.parseFile(javaPath, commandGatewayCaller);
+            parsedDescriptors.addAll(gatewayCallerDescriptors);
         }
         /*
         List<HandlerDescriptor> parsedDescriptors = methodParser.parseFile(javaPath, "io.baardl.axon.action.ActionCommandHandler");
