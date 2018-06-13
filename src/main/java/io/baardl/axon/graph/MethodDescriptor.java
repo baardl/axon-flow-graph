@@ -1,5 +1,7 @@
 package io.baardl.axon.graph;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * {
  "name": "io.baardl.axon.action.ActionCommandHandler",
@@ -11,6 +13,7 @@ package io.baardl.axon.graph;
 public class MethodDescriptor {
     private final String name;
     private final String type;
+    @SerializedName("method_name")
     private String methodName;
     private String next;
 
